@@ -1,6 +1,8 @@
 # slidev-poll-server
 
-WebSocket server for [slidev-component-poll](https://github.com/Smile-SA/slidev-component-poll).
+WebSocket server for [slidev-component-wssynchro](https://github.com/barais/slidev-addon-ws-syncho.git).
+
+Based on a fork of https://github.com/Smile-SA/slidev-poll-server
 
 ## Installation
 
@@ -36,5 +38,3 @@ Available environment variables:
 |---|---|---|---|
 | PORT | `number` | `8080` | Change running port |
 | DEBUG | `'error' \| 'warn' \| 'info'` | `'error'` | Debug level |
-| WS | `boolean` | `false` | use WebSocket if `true`, else use HTTP Server Sent Events |
-| CORS_ORIGIN | `string` | `'*'` | Access-Control-Allow-Origin header for HTTP SSE |

@@ -1,18 +1,16 @@
 import { WebSocket, WebSocketServer } from "ws";
-import { SendType } from "../types/data";
+import { SendType, SlideState } from "../types/data.js";
 
-import { Groups, WsConnections } from "../types/groups";
-import { PollState, UserState } from "../types/polls";
-
-import { isAnswerData, isConnectData, isLoginData, isResetData, isStatusData } from "./data";
-import { log, LogLevel } from "./log";
-import { getRoutes } from "./routes";
+import { Groups, WsConnections } from "../types/groups.js";
+import { log, LogLevel } from "./log.js";
+import { getRoutes } from "./routes.js";
+import { isBroadcastData, isConnectData } from "./data.js";
 
 const groups: Groups = new Map();
 const connections: WsConnections = new Map();
 
 export function initServer(port: number) {
-  const { answer, connect, login, reset, status } = getRoutes(
+  const {  connect } = getRoutes(
     groups,
     send,
     broadcast,
@@ -26,17 +24,13 @@ export function initServer(port: number) {
       log("--- RECEIVED ---");
       log(data);
       if (isConnectData(data)) {
-        connect(data, ws);
-      } else if (isResetData(data)) {
-        reset(data);
-      } else if (isAnswerData(data)) {
-        answer(data);
-      } else if (isStatusData(data)) {
-        status(data);
-      } else if (isLoginData(data)) {
-        login(data);
+        connect(data, ws); 
+      } else if (isBroadcastData(data)) {
+        console.error('should broadcast')
+        broadcast(data.id, data.state,  SendType.SLIDE,ws )
       }
-    });
+    }
+    );
 
     ws.on("close", () => {
       connections.delete(ws);
@@ -58,25 +52,25 @@ export function removeConnection(connection: WebSocket) {
 
 export function send(
   ws: WebSocket,
-  data: unknown,
-  type: SendType = SendType.POLL
+  state: unknown,
+  mtype: SendType = SendType.SLIDE
 ) {
   if (process.env.DEBUG === "info") {
     log("--- SEND ---");
-    log(data);
+    log(state);
   }
-  ws.send(JSON.stringify({ type, data }));
+  ws.send(JSON.stringify({ mtype, state }));
 }
 
 export function broadcast(
   groupId: string,
-  state: PollState | UserState,
-  type: SendType = SendType.POLL,
+  state: SlideState,
+  mtype: SendType = SendType.SLIDE,
   connection?: WebSocket
 ) {
   for (const [conn, id] of connections.entries()) {
     if (groupId === id && conn !== connection) {
-      send(conn, state, type);
+      send(conn, state, mtype);
     }
   }
 }

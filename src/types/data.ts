@@ -1,39 +1,27 @@
-import { PollState, PollStatus, Result } from "./polls";
 
-export enum DataType {
-  ANSWER = "answer",
-  BROADCAST = "broadcast",
-  CONNECT = "connect",
-  LOGIN = "login",
-  RESET = "reset",
-  STATUS = "status",
-}
 
-export enum SendType {
-  POLL = "poll",
-  USER = "user",
-}
+
 
 export interface Data {
   id: string;
+}
+
+export interface BroadcastData extends Data {
+  state: SlideState;
+}
+
+export enum DataType {
+  CONNECT = "connect",
+  BROADCAST = "broadcast",
 }
 
 export interface WsData extends Data {
   type: DataType;
 }
 
-export interface AnswerData extends Data {
-  pollId: string;
-  userId: string;
-  result: Result;
-}
-
-export interface WsAnswerData extends AnswerData {
-  type: DataType.ANSWER;
-}
 
 export interface BroadcastData extends Data {
-  state: PollState;
+  state: SlideState;
 }
 
 export interface WsBroadcastData extends BroadcastData {
@@ -41,36 +29,38 @@ export interface WsBroadcastData extends BroadcastData {
 }
 
 export interface ConnectData extends Data {
-  state?: PollState;
+  state?: SlideState;
 }
 
 export interface WsConnectData extends ConnectData {
   type: DataType.CONNECT;
 }
 
-export interface ResetData extends Data {
-  pollId?: string;
-  state?: PollState;
+export enum SendType {
+  SLIDE = "slide",
+  DRAW = "draw"
 }
 
-export interface WsResetData extends ResetData {
-  type: DataType.RESET;
+
+export interface SlideState {
+  mtype: SendType.SLIDE
+  data: SharedState
 }
 
-export interface StatusData extends Data {
-  pollId: string;
-  status: PollStatus;
-}
+export interface SharedState {
+  page: number
+  clicks: number
+  cursor?: {
+    x: number
+    y: number
+  }
 
-export interface WsStatusData extends StatusData {
-  type: DataType.STATUS;
-}
+  viewerPage: number
+  viewerClicks: number
 
-export interface LoginData extends Data {
-  userId: string;
-  userName: string;
-}
-
-export interface WsLoginData extends LoginData {
-  type: DataType.LOGIN;
+  lastUpdate?: {
+    id: string
+    type: 'presenter' | 'viewer'
+    time: number
+  }
 }

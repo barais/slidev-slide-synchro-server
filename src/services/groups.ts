@@ -1,7 +1,7 @@
-import { Group, Groups } from "../types/groups";
-import { PollState } from "../types/polls";
+import { SlideState } from "../types/data.js";
+import { Group, Groups } from "../types/groups.js";
 
-import { log } from "./log";
+import { log } from "./log.js";
 
 export function removeOldGroup(groups: Groups, id: string) {
   if (groups.has(id)) {
@@ -19,17 +19,18 @@ export function removeOldGroups(groups: Groups) {
   }
 }
 
-export function initGroup(groups: Groups, id: string, state?: PollState) {
+export function initGroup(groups: Groups, id: string, state?: SlideState) {
   const date = new Date();
-  const group = {
-    created: date,
-    polls: state ?? {},
-    users: {},
-    updated: date,
-  };
-  log(`--- INIT GROUP "${id}" ---`);
-  log(group);
-  groups.set(id, group);
+
+    const group = {
+      created: date,
+      users: {},
+      state:state,
+      updated: date,
+    };  
+    groups.set(id, group);
+    log(`--- INIT GROUP "${id}" ---`);
+    log(group);  
 }
 
 export function updateGroup(groups: Groups, id: string, group: Group) {
