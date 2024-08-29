@@ -1,12 +1,12 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { WebSocket } from "ws";
 
-import { SendType } from "./data.js";
-import { SlideState } from "./data.js";
+import { SendType, SharedState } from "./data.js";
+import { DrawingData } from './data.js';
 
 export interface Group {
   created: Date;
-  state?: SlideState;
+  state?: SharedState;
   updated: Date;
   users: Record<string, string>;
 }
@@ -20,12 +20,12 @@ export type Connections<T extends WebSocket | ServerResponse<IncomingMessage>> =
 export type Send<T extends WebSocket | ServerResponse<IncomingMessage>> = (
   connection: T,
   data: unknown,
-  type?: SendType,
+  mtype: SendType,
 ) => void;
 export type Broadcast<T extends WebSocket | ServerResponse<IncomingMessage>> = (
   groupId: string,
-  state: SlideState | SlideState,
-  type?: SendType,
+  state: SharedState | DrawingData,
+  mtype: SendType,
   connection?: T,
 ) => void;
 export type AddConnection<

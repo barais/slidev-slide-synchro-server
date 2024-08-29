@@ -1,4 +1,4 @@
-import { SlideState } from "../types/data.js";
+import { SharedState } from "../types/data.js";
 import { Group, Groups } from "../types/groups.js";
 
 import { log } from "./log.js";
@@ -19,7 +19,7 @@ export function removeOldGroups(groups: Groups) {
   }
 }
 
-export function initGroup(groups: Groups, id: string, state?: SlideState) {
+export function initGroup(groups: Groups, id: string, state?: SharedState) {
   const date = new Date();
 
     const group = {

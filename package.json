@@ -1,6 +1,6 @@
 {
   "name": "slidev-wssynchro-server",
-  "version": "0.0.0",
+  "version": "1.0.2",
   "description": "WebSocket server for slidev-component-wssyncho (based on a fork of https://github.com/Smile-SA/slidev-poll-server)",
   "homepage": "https://github.com/barais/slidev-slide-synchro-server",
   "repository": {
