@@ -80,10 +80,11 @@ export interface SharedState {
 
   viewerPage: number
   viewerClicks: number
-
   lastUpdate?: {
     id: string
     type: 'presenter' | 'viewer'
     time: number
-  }
+  },
+  dump?: string
+
 }
